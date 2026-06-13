@@ -1,0 +1,7 @@
+﻿services:
+  aleexnl.library.management.webapi:
+    image: aleexnl.library.management.webapi
+    build:
+      context: .
+      dockerfile: src/Aleexnl.Library.Management.WebAPI/Dockerfile
+

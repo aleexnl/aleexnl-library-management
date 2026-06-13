@@ -1,0 +1,41 @@
+@Aleexnl.Library.Management.WebAPI_HostAddress = http://localhost:5270
+
+POST {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/
+Content-Type: application/json
+
+{
+    "title": "The Pragmatic Programmer",
+    "author": "Andrew Hunt",
+    "isbn": "978-0201616224",
+    "description": "Classic software engineering book.",
+    "publishedOn": "1999-10-30",
+    "pageCount": 352
+}
+
+###
+
+GET {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books?pageNumber=1&pageSize=10
+Accept: application/json
+
+###
+
+GET {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/{{bookId}}
+Accept: application/json
+
+###
+
+PUT {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/{{bookId}}
+Content-Type: application/json
+
+{
+    "title": "The Pragmatic Programmer (20th Anniversary Edition)",
+    "author": "Andrew Hunt",
+    "isbn": "978-0135957059",
+    "description": "Updated edition.",
+    "publishedOn": "2019-09-13",
+    "pageCount": 352
+}
+
+###
+
+DELETE {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/{{bookId}}

@@ -1,0 +1,28 @@
+<Solution>
+  <Folder Name="/1. Presentation/">
+    <Project Path="src/Aleexnl.Library.Management.WebAPI/Aleexnl.Library.Management.WebAPI.csproj"/>
+  </Folder>
+  <Folder Name="/2. Domain/">
+    <Project Path="src\Aleexnl.Library.Management.Domain.Contracts\Aleexnl.Library.Management.Domain.Contracts.csproj"/>
+    <Project Path="src\Aleexnl.Library.Management.Domain.Impl\Aleexnl.Library.Management.Domain.Impl.csproj"/>
+  </Folder>
+  <Folder Name="/3. Data/">
+    <Project Path="src/Aleexnl.Library.Management.Data.Contracts/Aleexnl.Library.Management.Data.Contracts.csproj"/>
+    <Project Path="src/Aleexnl.Library.Management.Data.Impl/Aleexnl.Library.Management.Data.Impl.csproj"/>
+  </Folder>
+  <Folder Name="/Common/">
+    <Project Path="src/Aleexnl.Library.Management.Common/Aleexnl.Library.Management.Common.csproj"/>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore"/>
+    <File Path="compose.yaml"/>
+    <File Path="README.md"/>
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project
+      Path="test/Aleexnl.Library.Management.Common.UnitTests/Aleexnl.Library.Management.Common.UnitTests.csproj"/>
+    <Project Path="test/Aleexnl.Library.Management.Data.UnitTests/Aleexnl.Library.Management.Data.UnitTests.csproj"/>
+    <Project
+      Path="test/Aleexnl.Library.Management.Domain.UnitTests/Aleexnl.Library.Management.Domain.UnitTests.csproj"/>
+  </Folder>
+</Solution>

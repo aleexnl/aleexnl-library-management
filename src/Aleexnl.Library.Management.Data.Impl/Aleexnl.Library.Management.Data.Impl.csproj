@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aleexnl.Library.Management.Common\Aleexnl.Library.Management.Common.csproj"/>
+    <ProjectReference Include="..\Aleexnl.Library.Management.Data.Contracts\Aleexnl.Library.Management.Data.Contracts.csproj"/>
+    <ProjectReference Include="..\Aleexnl.Library.Management.Domain.Contracts\Aleexnl.Library.Management.Domain.Contracts.csproj"/>
+  </ItemGroup>
+
+</Project>
