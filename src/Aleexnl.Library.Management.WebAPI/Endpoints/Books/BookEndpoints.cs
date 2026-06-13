@@ -20,7 +20,8 @@ public static class BookEndpoints
     public static IEndpointRouteBuilder MapBookEndpoints(this IEndpointRouteBuilder app)
     {
         RouteGroupBuilder group = app.MapGroup("/api/books")
-            .WithTags("Books");
+            .WithTags("Books")
+            .RequireAuthorization();
 
         group.MapGet("/", GetBooksAsync)
             .WithName("GetBooks")
