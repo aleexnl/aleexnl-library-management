@@ -101,17 +101,12 @@ public static class BookEndpoints
     {
         Result<BookDto> result = await bookService.UpdateAsync(id, request, cancellationToken);
 
-        if (result.IsFailure && result.Error!.Code == ErrorCode.NotFound)
+        return result.IsFailure switch
         {
-            return TypedResults.NotFound();
-        }
-
-        if (result.IsFailure && result.Error!.Code == ErrorCode.Conflict)
-        {
-            return ToConflict(result.Error);
-        }
-
-        return TypedResults.Ok(result.Value!);
+            true when result.Error!.Code == ErrorCode.NotFound => TypedResults.NotFound(),
+            true when result.Error!.Code == ErrorCode.Conflict => ToConflict(result.Error),
+            _ => TypedResults.Ok(result.Value!)
+        };
     }
 
     private static async Task<Results<NoContent, NotFound>> DeleteBookAsync(
