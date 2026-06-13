@@ -8,3 +8,5 @@ riderModule.iml
 /src/Aleexnl.Library.Management.WebAPI/library-management.db
 /src/Aleexnl.Library.Management.WebAPI/library-management.db-shm
 /src/Aleexnl.Library.Management.WebAPI/library-management.db-wal
+TestResults/
+artifacts/
