@@ -1,5 +1,6 @@
 using Aleexnl.Library.Management.Data.Impl.Persistence;
 using Aleexnl.Library.Management.WebAPI.Endpoints.Books;
+using Scalar.AspNetCore;
 
 namespace Aleexnl.Library.Management.WebAPI.Configuration;
 
@@ -30,8 +31,8 @@ public static class WebApplicationExtensions
         {
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.MapOpenApi();
+                app.MapScalarApiReference();
             }
 
             return app;
@@ -63,7 +64,8 @@ public static class WebApplicationExtensions
         private async Task EnsureDatabaseCreatedAsync()
         {
             await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
-            LibraryManagementDbContext dbContext = scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
+            LibraryManagementDbContext dbContext =
+                scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
 
             await dbContext.Database.EnsureCreatedAsync();
         }

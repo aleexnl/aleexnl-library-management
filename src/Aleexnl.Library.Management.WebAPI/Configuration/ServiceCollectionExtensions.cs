@@ -1,6 +1,8 @@
 using Aleexnl.Library.Management.Data.Impl;
 using Aleexnl.Library.Management.Domain.Impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi;
 
 namespace Aleexnl.Library.Management.WebAPI.Configuration;
 
@@ -30,8 +32,46 @@ public static class ServiceCollectionExtensions
         private IServiceCollection AddApiDocumentation()
         {
             services.AddProblemDetails();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddOpenApi(options =>
+            {
+                const string bearerSecuritySchemeId = "Bearer";
+
+                options.AddDocumentTransformer((document, _, _) =>
+                {
+                    document.Components ??= new OpenApiComponents();
+                    document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+                    document.Components.SecuritySchemes[bearerSecuritySchemeId] = new OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        Description = "Paste a valid Auth0 bearer token.",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = JwtBearerDefaults.AuthenticationScheme,
+                        BearerFormat = "JWT"
+                    };
+
+                    return Task.CompletedTask;
+                });
+                options.AddOperationTransformer((operation, context, _) =>
+                {
+                    bool requiresAuthorization = context.Description.ActionDescriptor.EndpointMetadata
+                        .OfType<IAuthorizeData>()
+                        .Any();
+
+                    if (!requiresAuthorization)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    operation.Security ??= [];
+                    operation.Security.Add(new OpenApiSecurityRequirement
+                    {
+                        [new OpenApiSecuritySchemeReference(bearerSecuritySchemeId)] = []
+                    });
+
+                    return Task.CompletedTask;
+                });
+            });
 
             return services;
         }
@@ -47,7 +87,8 @@ public static class ServiceCollectionExtensions
             }).AddJwtBearer(options =>
             {
                 options.Authority = authenticationSection["Authority"]
-                                    ?? throw new InvalidOperationException("Authentication:Authority is not configured.");
+                                    ?? throw new InvalidOperationException(
+                                        "Authentication:Authority is not configured.");
                 options.Audience = authenticationSection["Audience"]
                                    ?? throw new InvalidOperationException("Authentication:Audience is not configured.");
             });
