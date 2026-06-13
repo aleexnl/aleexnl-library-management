@@ -18,6 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="library-management.db">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Aleexnl.Library.Management.Common\Aleexnl.Library.Management.Common.csproj"/>
     <ProjectReference Include="..\Aleexnl.Library.Management.Data.Impl\Aleexnl.Library.Management.Data.Impl.csproj"/>
     <ProjectReference Include="..\Aleexnl.Library.Management.Domain.Impl\Aleexnl.Library.Management.Domain.Impl.csproj"/>

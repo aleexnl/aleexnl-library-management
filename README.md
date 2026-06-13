@@ -109,6 +109,31 @@ Run only the domain tests:
 dotnet test test/Aleexnl.Library.Management.Domain.UnitTests/Aleexnl.Library.Management.Domain.UnitTests.csproj
 ```
 
+## Deployment
+
+This repository includes a GitHub Actions workflow at `.github/workflows/deploy-monsterasp.yml` that builds, tests,
+publishes, and deploys the Web API to MonsterASP.NET on every push to `main`. You can also run it manually from the
+GitHub Actions tab using `workflow_dispatch`.
+
+Before the workflow can deploy successfully:
+
+1. Activate WebDeploy for your site in the MonsterASP.NET control panel.
+2. Add these repository secrets in GitHub:
+    - `WEBSITE_NAME`
+    - `SERVER_COMPUTER_NAME`
+    - `SERVER_USERNAME`
+    - `SERVER_PASSWORD`
+
+MonsterASP.NET documents these values as:
+
+- `WEBSITE_NAME`: `siteXXXX`
+- `SERVER_COMPUTER_NAME`: `https://siteXXXX.siteasp.net:8172`
+- `SERVER_USERNAME`: `siteXXXX`
+- `SERVER_PASSWORD`: your WebDeploy password
+
+The workflow publishes the ASP.NET Core app for `win-x86` and excludes `library-management.db` from publish output so a
+local SQLite database file is not pushed to the hosted site.
+
 ## Docker
 
 Build the container image with Docker Compose:
