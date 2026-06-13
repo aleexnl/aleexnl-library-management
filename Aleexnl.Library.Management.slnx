@@ -20,9 +20,6 @@
   </Folder>
   <Folder Name="/Tests/">
     <Project
-      Path="test/Aleexnl.Library.Management.Common.UnitTests/Aleexnl.Library.Management.Common.UnitTests.csproj"/>
-    <Project Path="test/Aleexnl.Library.Management.Data.UnitTests/Aleexnl.Library.Management.Data.UnitTests.csproj"/>
-    <Project
       Path="test/Aleexnl.Library.Management.Domain.UnitTests/Aleexnl.Library.Management.Domain.UnitTests.csproj"/>
   </Folder>
 </Solution>
