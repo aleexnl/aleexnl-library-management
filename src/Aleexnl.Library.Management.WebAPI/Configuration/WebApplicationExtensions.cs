@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Aleexnl.Library.Management.Data.Impl.Persistence;
 using Aleexnl.Library.Management.WebAPI.Endpoints.Books;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 namespace Aleexnl.Library.Management.WebAPI.Configuration;
@@ -56,7 +59,27 @@ public static class WebApplicationExtensions
 
         private WebApplication MapApiEndpoints()
         {
+            app.MapHealthEndpoints();
             app.MapBookEndpoints();
+
+            return app;
+        }
+
+        private WebApplication MapHealthEndpoints()
+        {
+            app.MapHealthChecks("/health/live",
+                new HealthCheckOptions
+                {
+                    Predicate = registration => registration.Tags.Contains("live"),
+                    ResponseWriter = WriteHealthCheckResponseAsync
+                });
+
+            app.MapHealthChecks("/health/ready",
+                new HealthCheckOptions
+                {
+                    Predicate = registration => registration.Tags.Contains("ready"),
+                    ResponseWriter = WriteHealthCheckResponseAsync
+                });
 
             return app;
         }
@@ -68,6 +91,25 @@ public static class WebApplicationExtensions
                 scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
 
             await dbContext.Database.EnsureCreatedAsync();
+        }
+
+        private static async Task WriteHealthCheckResponseAsync(HttpContext context, HealthReport report)
+        {
+            context.Response.ContentType = "application/json";
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                status = report.Status.ToString(),
+                totalDuration = report.TotalDuration,
+                checks = report.Entries.ToDictionary(
+                    entry => entry.Key,
+                    entry => new
+                    {
+                        status = entry.Value.Status.ToString(),
+                        description = entry.Value.Description,
+                        duration = entry.Value.Duration
+                    })
+            }, JsonSerializerOptions.Web);
         }
     }
 }
