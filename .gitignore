@@ -4,3 +4,7 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .idea
+/Aleexnl.Library.Management.sln.DotSettings.user
+/src/Aleexnl.Library.Management.WebAPI/library-management.db
+/src/Aleexnl.Library.Management.WebAPI/library-management.db-shm
+/src/Aleexnl.Library.Management.WebAPI/library-management.db-wal
