@@ -93,8 +93,6 @@ src/
   Aleexnl.Library.Management.Common           Shared utilities
 test/
   Aleexnl.Library.Management.Domain.UnitTests Domain service tests
-  Aleexnl.Library.Management.Data.UnitTests   Data-layer test project
-  Aleexnl.Library.Management.Common.UnitTests Common-layer test project
 ```
 
 ## Testing
