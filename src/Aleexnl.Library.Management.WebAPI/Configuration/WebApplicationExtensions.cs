@@ -8,34 +8,64 @@ namespace Aleexnl.Library.Management.WebAPI.Configuration;
 /// </summary>
 public static class WebApplicationExtensions
 {
-    /// <summary>
-    /// Applies the library management API pipeline and startup initialization.
-    /// </summary>
     /// <param name="app">The web application to configure.</param>
-    /// <returns>The configured web application.</returns>
-    public static async Task<WebApplication> UseWebApiAsync(this WebApplication app)
+    extension(WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        /// <summary>
+        /// Applies the library management API pipeline and startup initialization.
+        /// </summary>
+        /// <returns>The configured web application.</returns>
+        public async Task<WebApplication> UseWebApiAsync()
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseApiDocumentation();
+            app.UseApiInfrastructure();
+            app.UseApiSecurity();
+            await app.EnsureDatabaseCreatedAsync();
+            app.MapApiEndpoints();
+
+            return app;
         }
 
-        app.UseExceptionHandler();
-        app.UseHttpsRedirection();
+        private WebApplication UseApiDocumentation()
+        {
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-        await app.EnsureDatabaseCreatedAsync();
+            return app;
+        }
 
-        app.MapBookEndpoints();
+        private WebApplication UseApiInfrastructure()
+        {
+            app.UseExceptionHandler();
+            app.UseHttpsRedirection();
 
-        return app;
-    }
+            return app;
+        }
 
-    private static async Task EnsureDatabaseCreatedAsync(this WebApplication app)
-    {
-        await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
-        LibraryManagementDbContext dbContext = scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
+        private WebApplication UseApiSecurity()
+        {
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-        await dbContext.Database.EnsureCreatedAsync();
+            return app;
+        }
+
+        private WebApplication MapApiEndpoints()
+        {
+            app.MapBookEndpoints();
+
+            return app;
+        }
+
+        private async Task EnsureDatabaseCreatedAsync()
+        {
+            await using AsyncServiceScope scope = app.Services.CreateAsyncScope();
+            LibraryManagementDbContext dbContext = scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
+
+            await dbContext.Database.EnsureCreatedAsync();
+        }
     }
 }
