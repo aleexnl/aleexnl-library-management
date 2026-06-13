@@ -36,11 +36,16 @@ jobs:
       - name: Run tests
         run: dotnet test Aleexnl.Library.Management.slnx --configuration Release --no-build
 
+      - name: Restore Web API for deployment runtime
+        run: >
+          dotnet restore src/Aleexnl.Library.Management.WebAPI/Aleexnl.Library.Management.WebAPI.csproj
+          --runtime win-x86
+
       - name: Publish Web API
         run: >
           dotnet publish src/Aleexnl.Library.Management.WebAPI/Aleexnl.Library.Management.WebAPI.csproj
           --configuration Release
-          --no-build
+          --no-restore
           --output "${{ github.workspace }}\\publish"
           --runtime win-x86
           --self-contained false
