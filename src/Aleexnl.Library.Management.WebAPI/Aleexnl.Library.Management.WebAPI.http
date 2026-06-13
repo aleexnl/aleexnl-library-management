@@ -1,6 +1,7 @@
-@Aleexnl.Library.Management.WebAPI_HostAddress = http://localhost:5270
+@hostAddress = https://localhost:7209
+@bookId = 019ec221-1775-7d29-936b-f0f127fe6e1b
 
-POST {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/
+POST {{hostAddress}}/api/books/
 Content-Type: application/json
 
 {
@@ -14,17 +15,17 @@ Content-Type: application/json
 
 ###
 
-GET {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books?pageNumber=1&pageSize=10
+GET {{hostAddress}}/api/books?pageNumber=1&pageSize=10
 Accept: application/json
 
 ###
 
-GET {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/{{bookId}}
+GET {{hostAddress}}/api/books/{{bookId}}
 Accept: application/json
 
 ###
 
-PUT {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/{{bookId}}
+PUT {{hostAddress}}/api/books/{{bookId}}
 Content-Type: application/json
 
 {
@@ -38,4 +39,4 @@ Content-Type: application/json
 
 ###
 
-DELETE {{Aleexnl.Library.Management.WebAPI_HostAddress}}/api/books/{{bookId}}
+DELETE {{hostAddress}}/api/books/{{bookId}}

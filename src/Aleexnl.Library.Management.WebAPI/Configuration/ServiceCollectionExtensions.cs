@@ -17,7 +17,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddWebApi(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddProblemDetails();
-        services.AddOpenApi();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
         services.AddValidation();
         services.AddData(configuration);
         services.AddDomain();

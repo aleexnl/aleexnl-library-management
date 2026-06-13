@@ -12,18 +12,12 @@ rules, and persistence stay isolated.
 - Enforce ISBN uniqueness using a normalized ISBN value
 - Return paginated book lists with configurable page size
 - Persist data with Entity Framework Core and SQLite
-- Expose OpenAPI metadata in development
+- Expose Swagger documentation in development
 - Cover domain behavior with xUnit tests
-
-## Project Status
-
-This project is in active early development. The current API surface is centered on book management and the README
-documents what exists today.
 
 ## Requirements
 
 - .NET 10 SDK
-- `~/.dotnet/dotnet` if your default `dotnet` command resolves to an older SDK
 - Docker Desktop or a compatible Docker runtime if you want to build the container image
 
 ## Installation
@@ -31,15 +25,15 @@ documents what exists today.
 1. Clone the repository.
 2. Restore dependencies:
 
-```bash
-~/.dotnet/dotnet restore Aleexnl.Library.Management.slnx
-```
+    ```bash
+    dotnet restore Aleexnl.Library.Management.slnx
+    ```
 
 3. Build the solution:
 
-```bash
-~/.dotnet/dotnet build Aleexnl.Library.Management.slnx
-```
+    ```bash
+    dotnet build Aleexnl.Library.Management.slnx
+    ```
 
 ## Configuration
 
@@ -53,8 +47,6 @@ The API reads its connection string from `src/Aleexnl.Library.Management.WebAPI/
 }
 ```
 
-If the connection string is not provided, the application falls back to `Data Source=library-management.db`.
-
 The database schema is created automatically on startup through `EnsureCreatedAsync()`, which makes local setup simple
 but is not a replacement for production-grade migrations.
 
@@ -63,7 +55,7 @@ but is not a replacement for production-grade migrations.
 Run the API locally:
 
 ```bash
-~/.dotnet/dotnet run --project src/Aleexnl.Library.Management.WebAPI/Aleexnl.Library.Management.WebAPI.csproj
+dotnet run --project src/Aleexnl.Library.Management.WebAPI/Aleexnl.Library.Management.WebAPI.csproj
 ```
 
 In development, the default local URLs are:
@@ -71,59 +63,13 @@ In development, the default local URLs are:
 - `http://localhost:5270`
 - `https://localhost:7209`
 
-OpenAPI is available in development when the app is running:
+Swagger is the entry point for API documentation in development. When the app is running locally, open:
 
-- `GET /openapi/v1.json`
+- `http://localhost:5270/swagger`
+- `https://localhost:7209/swagger`
 
-### Example Requests
-
-Create a book:
-
-```bash
-curl -X POST http://localhost:5270/api/books/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "The Pragmatic Programmer",
-    "author": "Andrew Hunt",
-    "isbn": "978-0201616224",
-    "description": "Classic software engineering book.",
-    "publishedOn": "1999-10-30",
-    "pageCount": 352
-  }'
-```
-
-Get the first page of books:
-
-```bash
-curl "http://localhost:5270/api/books?pageNumber=1&pageSize=10"
-```
-
-Get a book by id:
-
-```bash
-curl http://localhost:5270/api/books/{bookId}
-```
-
-Update a book:
-
-```bash
-curl -X PUT http://localhost:5270/api/books/{bookId} \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "The Pragmatic Programmer (20th Anniversary Edition)",
-    "author": "Andrew Hunt",
-    "isbn": "978-0135957059",
-    "description": "Updated edition.",
-    "publishedOn": "2019-09-13",
-    "pageCount": 352
-  }'
-```
-
-Soft-delete a book:
-
-```bash
-curl -X DELETE http://localhost:5270/api/books/{bookId}
-```
+The Swagger UI includes the current endpoints, request and response schemas, and an interactive way to test operations.
+Swagger is only enabled when `ASPNETCORE_ENVIRONMENT` is `Development`.
 
 ### API Notes
 
@@ -156,17 +102,14 @@ test/
 Run the full test suite:
 
 ```bash
-~/.dotnet/dotnet test Aleexnl.Library.Management.slnx
+dotnet test Aleexnl.Library.Management.slnx
 ```
 
 Run only the domain tests:
 
 ```bash
-~/.dotnet/dotnet test test/Aleexnl.Library.Management.Domain.UnitTests/Aleexnl.Library.Management.Domain.UnitTests.csproj
+dotnet test test/Aleexnl.Library.Management.Domain.UnitTests/Aleexnl.Library.Management.Domain.UnitTests.csproj
 ```
-
-At the time this README was updated, the solution test run completed successfully with 12 passing domain tests. The
-Common and Data test projects build, but currently do not contain discovered tests.
 
 ## Docker
 
@@ -193,7 +136,7 @@ Before opening a pull request:
 4. Run:
 
 ```bash
-~/.dotnet/dotnet test Aleexnl.Library.Management.slnx
+dotnet test Aleexnl.Library.Management.slnx
 ```
 
 Commit messages should follow Conventional Commits such as `feat:`, `fix:`, `docs:`, or `chore:`.
