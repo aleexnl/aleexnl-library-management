@@ -1,7 +1,9 @@
 using Aleexnl.Library.Management.Data.Impl;
 using Aleexnl.Library.Management.Domain.Impl;
+using Aleexnl.Library.Management.WebAPI.HealthChecks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi;
 
 namespace Aleexnl.Library.Management.WebAPI.Configuration;
@@ -24,6 +26,7 @@ public static class ServiceCollectionExtensions
             services.AddApiDocumentation();
             services.AddApiAuthentication(configuration);
             services.AddApiAuthorization();
+            services.AddApiHealthChecks();
             services.AddApiApplicationServices(configuration);
 
             return services;
@@ -99,6 +102,15 @@ public static class ServiceCollectionExtensions
         private IServiceCollection AddApiAuthorization()
         {
             services.AddAuthorization();
+
+            return services;
+        }
+
+        private IServiceCollection AddApiHealthChecks()
+        {
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy("Application is running."), ["live"])
+                .AddCheck<DatabaseHealthCheck>("database", tags: ["ready"]);
 
             return services;
         }
