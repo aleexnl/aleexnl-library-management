@@ -19,7 +19,7 @@ public sealed class DatabaseHealthCheck(LibraryManagementDbContext dbContext) : 
         HealthCheckContext context,
         CancellationToken cancellationToken = default)
     {
-        bool canConnect = await dbContext.Database.CanConnectAsync(cancellationToken);
+        bool canConnect = await dbContext.Database.CanConnectAsync(cancellationToken).ConfigureAwait(false);
 
         return canConnect
             ? HealthCheckResult.Healthy("Database connection is available.")

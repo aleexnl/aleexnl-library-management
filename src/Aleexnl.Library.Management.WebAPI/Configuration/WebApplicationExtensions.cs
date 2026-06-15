@@ -18,54 +18,43 @@ public static class WebApplicationExtensions
         /// <summary>
         /// Applies the library management API pipeline and startup initialization.
         /// </summary>
-        /// <returns>The configured web application.</returns>
-        public async Task<WebApplication> UseWebApiAsync()
+        public async Task UseWebApiAsync()
         {
             app.UseApiDocumentation();
             app.UseApiInfrastructure();
             app.UseApiSecurity();
-            await app.EnsureDatabaseCreatedAsync();
+            await app.EnsureDatabaseCreatedAsync().ConfigureAwait(false);
             app.MapApiEndpoints();
-
-            return app;
         }
 
-        private WebApplication UseApiDocumentation()
+        private void UseApiDocumentation()
         {
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
-
-            return app;
         }
 
-        private WebApplication UseApiInfrastructure()
+        private void UseApiInfrastructure()
         {
             app.UseExceptionHandler();
             app.UseHttpsRedirection();
-
-            return app;
         }
 
-        private WebApplication UseApiSecurity()
+        private void UseApiSecurity()
         {
             app.UseAuthentication();
             app.UseAuthorization();
-
-            return app;
         }
 
-        private WebApplication MapApiEndpoints()
+        private void MapApiEndpoints()
         {
             app.MapHealthEndpoints();
             app.MapBookEndpoints();
-
-            return app;
         }
 
-        private WebApplication MapHealthEndpoints()
+        private void MapHealthEndpoints()
         {
             app.MapHealthChecks("/health/live",
                 new HealthCheckOptions
@@ -80,8 +69,6 @@ public static class WebApplicationExtensions
                     Predicate = registration => registration.Tags.Contains("ready"),
                     ResponseWriter = WriteHealthCheckResponseAsync
                 });
-
-            return app;
         }
 
         private async Task EnsureDatabaseCreatedAsync()
@@ -90,7 +77,7 @@ public static class WebApplicationExtensions
             LibraryManagementDbContext dbContext =
                 scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
 
-            await dbContext.Database.EnsureCreatedAsync();
+            await dbContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
         }
 
         private static async Task WriteHealthCheckResponseAsync(HttpContext context, HealthReport report)
@@ -98,18 +85,19 @@ public static class WebApplicationExtensions
             context.Response.ContentType = "application/json";
 
             await context.Response.WriteAsJsonAsync(new
-            {
-                status = report.Status.ToString(),
-                totalDuration = report.TotalDuration,
-                checks = report.Entries.ToDictionary(
-                    entry => entry.Key,
-                    entry => new
-                    {
-                        status = entry.Value.Status.ToString(),
-                        description = entry.Value.Description,
-                        duration = entry.Value.Duration
-                    })
-            }, JsonSerializerOptions.Web);
+                {
+                    status = report.Status.ToString(),
+                    totalDuration = report.TotalDuration,
+                    checks = report.Entries.ToDictionary(
+                        entry => entry.Key,
+                        entry => new
+                        {
+                            status = entry.Value.Status.ToString(),
+                            description = entry.Value.Description,
+                            duration = entry.Value.Duration
+                        })
+                }, JsonSerializerOptions.Web)
+                .ConfigureAwait(false);
         }
     }
 }

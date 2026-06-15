@@ -11,6 +11,12 @@ public sealed class BookRepository(LibraryManagementDbContext dbContext) : IBook
         ExistsByNormalizedIsbnAsync(string normalizedIsbn, CancellationToken cancellationToken = default) =>
         dbContext.Books.AnyAsync(book => book.NormalizedIsbn == normalizedIsbn, cancellationToken);
 
+    public Task<bool> ExistsByNormalizedIsbnAsync(string normalizedIsbn, Guid excludedBookId,
+        CancellationToken cancellationToken = default) =>
+        dbContext.Books.AnyAsync(
+            book => book.NormalizedIsbn == normalizedIsbn && book.Id != excludedBookId,
+            cancellationToken);
+
     public Task<Book?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
         dbContext.Books
             .AsNoTracking()
@@ -32,12 +38,6 @@ public sealed class BookRepository(LibraryManagementDbContext dbContext) : IBook
 
     public Task<int> CountAsync(CancellationToken cancellationToken = default) =>
         dbContext.Books.CountAsync(cancellationToken);
-
-    public Task<bool> ExistsByNormalizedIsbnAsync(string normalizedIsbn, Guid excludedBookId,
-        CancellationToken cancellationToken = default) =>
-        dbContext.Books.AnyAsync(
-            book => book.NormalizedIsbn == normalizedIsbn && book.Id != excludedBookId,
-            cancellationToken);
 
     public Task AddAsync(Book book, CancellationToken cancellationToken = default) =>
         dbContext.Books.AddAsync(book, cancellationToken).AsTask();

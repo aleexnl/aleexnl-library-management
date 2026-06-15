@@ -16,6 +16,16 @@ public interface IBookRepository
     Task<bool> ExistsByNormalizedIsbnAsync(string normalizedIsbn, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Determines whether another non-deleted book exists for the provided normalized ISBN.
+    /// </summary>
+    /// <param name="normalizedIsbn">The normalized ISBN to search for.</param>
+    /// <param name="excludedBookId">The identifier to exclude from the check.</param>
+    /// <param name="cancellationToken">The cancellation token for the operation.</param>
+    /// <returns><see langword="true" /> when another matching book exists; otherwise, <see langword="false" />.</returns>
+    Task<bool> ExistsByNormalizedIsbnAsync(string normalizedIsbn, Guid excludedBookId,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Finds a non-deleted book by its identifier.
     /// </summary>
     /// <param name="id">The identifier of the book.</param>
@@ -46,16 +56,6 @@ public interface IBookRepository
     /// <param name="cancellationToken">The cancellation token for the operation.</param>
     /// <returns>The total count of books.</returns>
     Task<int> CountAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Determines whether another non-deleted book exists for the provided normalized ISBN.
-    /// </summary>
-    /// <param name="normalizedIsbn">The normalized ISBN to search for.</param>
-    /// <param name="excludedBookId">The identifier to exclude from the check.</param>
-    /// <param name="cancellationToken">The cancellation token for the operation.</param>
-    /// <returns><see langword="true"/> when another matching book exists; otherwise, <see langword="false"/>.</returns>
-    Task<bool> ExistsByNormalizedIsbnAsync(string normalizedIsbn, Guid excludedBookId,
-        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Adds a book to the current unit of work.

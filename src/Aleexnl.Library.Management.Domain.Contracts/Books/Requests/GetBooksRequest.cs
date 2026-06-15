@@ -16,6 +16,6 @@ public sealed class GetBooksRequest
     /// <summary>
     /// Gets the number of items to return per page.
     /// </summary>
-    [Range(1, 100)]
+    [Range(1, 10000)]
     public int PageSize { get; init; } = 20;
 }

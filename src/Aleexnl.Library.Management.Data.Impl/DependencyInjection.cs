@@ -27,7 +27,11 @@ public static class DependencyInjection
             throw new ArgumentException("Connection string is empty");
         }
 
-        services.AddDbContext<LibraryManagementDbContext>(options => options.UseSqlite(connectionString));
+        services.AddDbContext<LibraryManagementDbContext>(options => options
+            .UseSqlite(connectionString)
+            .UseSeeding((dbContext, _) => LibraryManagementDbSeeder.Seed(dbContext, configuration))
+            .UseAsyncSeeding((dbContext, _, cancellationToken) =>
+                LibraryManagementDbSeeder.SeedAsync(dbContext, configuration, cancellationToken)));
         services.AddScoped<IBookRepository, BookRepository>();
 
         return services;
