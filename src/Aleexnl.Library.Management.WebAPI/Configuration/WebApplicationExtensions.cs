@@ -24,7 +24,7 @@ public static class WebApplicationExtensions
             app.UseApiDocumentation();
             app.UseApiInfrastructure();
             app.UseApiSecurity();
-            await app.EnsureDatabaseCreatedAsync();
+            await app.EnsureDatabaseCreatedAsync().ConfigureAwait(false);
             app.MapApiEndpoints();
 
             return app;
@@ -90,7 +90,7 @@ public static class WebApplicationExtensions
             LibraryManagementDbContext dbContext =
                 scope.ServiceProvider.GetRequiredService<LibraryManagementDbContext>();
 
-            await dbContext.Database.EnsureCreatedAsync();
+            await dbContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
         }
 
         private static async Task WriteHealthCheckResponseAsync(HttpContext context, HealthReport report)
@@ -98,18 +98,19 @@ public static class WebApplicationExtensions
             context.Response.ContentType = "application/json";
 
             await context.Response.WriteAsJsonAsync(new
-            {
-                status = report.Status.ToString(),
-                totalDuration = report.TotalDuration,
-                checks = report.Entries.ToDictionary(
-                    entry => entry.Key,
-                    entry => new
-                    {
-                        status = entry.Value.Status.ToString(),
-                        description = entry.Value.Description,
-                        duration = entry.Value.Duration
-                    })
-            }, JsonSerializerOptions.Web);
+                {
+                    status = report.Status.ToString(),
+                    totalDuration = report.TotalDuration,
+                    checks = report.Entries.ToDictionary(
+                        entry => entry.Key,
+                        entry => new
+                        {
+                            status = entry.Value.Status.ToString(),
+                            description = entry.Value.Description,
+                            duration = entry.Value.Duration
+                        })
+                }, JsonSerializerOptions.Web)
+                .ConfigureAwait(false);
         }
     }
 }

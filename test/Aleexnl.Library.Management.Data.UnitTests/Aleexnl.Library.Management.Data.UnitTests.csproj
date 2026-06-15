@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="xunit.v3.mtp-v2"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Aleexnl.Library.Management.Data.Contracts\Aleexnl.Library.Management.Data.Contracts.csproj"/>
+    <ProjectReference Include="..\..\src\Aleexnl.Library.Management.Data.Impl\Aleexnl.Library.Management.Data.Impl.csproj"/>
+  </ItemGroup>
+
+</Project>
