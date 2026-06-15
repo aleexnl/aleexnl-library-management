@@ -18,54 +18,43 @@ public static class WebApplicationExtensions
         /// <summary>
         /// Applies the library management API pipeline and startup initialization.
         /// </summary>
-        /// <returns>The configured web application.</returns>
-        public async Task<WebApplication> UseWebApiAsync()
+        public async Task UseWebApiAsync()
         {
             app.UseApiDocumentation();
             app.UseApiInfrastructure();
             app.UseApiSecurity();
             await app.EnsureDatabaseCreatedAsync().ConfigureAwait(false);
             app.MapApiEndpoints();
-
-            return app;
         }
 
-        private WebApplication UseApiDocumentation()
+        private void UseApiDocumentation()
         {
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
-
-            return app;
         }
 
-        private WebApplication UseApiInfrastructure()
+        private void UseApiInfrastructure()
         {
             app.UseExceptionHandler();
             app.UseHttpsRedirection();
-
-            return app;
         }
 
-        private WebApplication UseApiSecurity()
+        private void UseApiSecurity()
         {
             app.UseAuthentication();
             app.UseAuthorization();
-
-            return app;
         }
 
-        private WebApplication MapApiEndpoints()
+        private void MapApiEndpoints()
         {
             app.MapHealthEndpoints();
             app.MapBookEndpoints();
-
-            return app;
         }
 
-        private WebApplication MapHealthEndpoints()
+        private void MapHealthEndpoints()
         {
             app.MapHealthChecks("/health/live",
                 new HealthCheckOptions
@@ -80,8 +69,6 @@ public static class WebApplicationExtensions
                     Predicate = registration => registration.Tags.Contains("ready"),
                     ResponseWriter = WriteHealthCheckResponseAsync
                 });
-
-            return app;
         }
 
         private async Task EnsureDatabaseCreatedAsync()

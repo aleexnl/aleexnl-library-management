@@ -20,19 +20,16 @@ public static class ServiceCollectionExtensions
         /// Adds the services required by the library management API.
         /// </summary>
         /// <param name="configuration">The application configuration.</param>
-        /// <returns>The configured service collection.</returns>
-        public IServiceCollection AddWebApi(IConfiguration configuration)
+        public void AddWebApi(IConfiguration configuration)
         {
             services.AddApiDocumentation();
             services.AddApiAuthentication(configuration);
             services.AddApiAuthorization();
             services.AddApiHealthChecks();
             services.AddApiApplicationServices(configuration);
-
-            return services;
         }
 
-        private IServiceCollection AddApiDocumentation()
+        private void AddApiDocumentation()
         {
             services.AddProblemDetails();
             services.AddOpenApi(options =>
@@ -75,11 +72,9 @@ public static class ServiceCollectionExtensions
                     return Task.CompletedTask;
                 });
             });
-
-            return services;
         }
 
-        private IServiceCollection AddApiAuthentication(IConfiguration configuration)
+        private void AddApiAuthentication(IConfiguration configuration)
         {
             IConfigurationSection authenticationSection = configuration.GetSection("Authentication");
 
@@ -95,33 +90,25 @@ public static class ServiceCollectionExtensions
                 options.Audience = authenticationSection["Audience"]
                                    ?? throw new InvalidOperationException("Authentication:Audience is not configured.");
             });
-
-            return services;
         }
 
-        private IServiceCollection AddApiAuthorization()
+        private void AddApiAuthorization()
         {
             services.AddAuthorization();
-
-            return services;
         }
 
-        private IServiceCollection AddApiHealthChecks()
+        private void AddApiHealthChecks()
         {
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy("Application is running."), ["live"])
                 .AddCheck<DatabaseHealthCheck>("database", tags: ["ready"]);
-
-            return services;
         }
 
-        private IServiceCollection AddApiApplicationServices(IConfiguration configuration)
+        private void AddApiApplicationServices(IConfiguration configuration)
         {
             services.AddValidation();
             services.AddData(configuration);
             services.AddDomain();
-
-            return services;
         }
     }
 }
