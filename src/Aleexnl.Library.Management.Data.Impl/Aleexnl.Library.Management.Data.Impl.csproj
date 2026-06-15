@@ -7,6 +7,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Aleexnl.Library.Management.Data.UnitTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Aleexnl.Library.Management.Common\Aleexnl.Library.Management.Common.csproj"/>
     <ProjectReference Include="..\Aleexnl.Library.Management.Data.Contracts\Aleexnl.Library.Management.Data.Contracts.csproj"/>
     <ProjectReference Include="..\Aleexnl.Library.Management.Domain.Contracts\Aleexnl.Library.Management.Domain.Contracts.csproj"/>
