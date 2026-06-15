@@ -58,7 +58,7 @@ internal static class LibraryManagementDbSeeder
             ? bookCount
             : DefaultBookCount;
 
-    private static IReadOnlyCollection<Book> CreateBooks(int count) =>
+    private static Book[] CreateBooks(int count) =>
         Enumerable.Range(1, count)
             .Select(CreateBook)
             .ToArray();
